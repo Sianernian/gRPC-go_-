@@ -1,0 +1,23 @@
+syntax ="proto3";
+
+// 新版本 必写  go语言文件生成的位置  .表示当前位置 service 代表了生成的go文件的包名是 service
+option go_package =".;service";
+
+message SimpleRequest{
+  // 定义发送的参数
+  // 参数类型 参数名 标识号(不可重复)
+  string data =1;  // 1是标识符 代表的是 参数所处的位置
+}
+
+message  SimpleResponse{
+  int32 code =1;
+  string value =2;
+  repeated string name=3;
+}
+
+service SimpleSay{
+  rpc Route(SimpleRequest) returns(SimpleResponse){}
+}
+
+ // 新版本 使用 protoc --go_out=. XXXX.proto
+ //         和 protoc --go-grpc_out=. XXXX.proto
