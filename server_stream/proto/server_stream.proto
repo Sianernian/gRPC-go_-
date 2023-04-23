@@ -1,0 +1,16 @@
+syntax ="proto3";
+
+option go_package =".;service";
+
+message ServerStreamRequest {
+  string data =1;
+}
+
+message ServerStreamResponse{
+   int32  code =1;
+   string value =2;
+}
+
+service ServerStreamTalk{
+  rpc listValue(ServerStreamRequest) returns(stream ServerStreamResponse){}
+}
