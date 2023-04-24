@@ -11,6 +11,15 @@ message ServerStreamResponse{
    string value =2;
 }
 
+message PingRequest {
+  string data =1;
+}
+
+message PingResponse {
+  string value =1;
+}
+
 service ServerStreamTalk{
+  rpc Ping(PingRequest) returns (PingResponse) {}
   rpc listValue(ServerStreamRequest) returns(stream ServerStreamResponse){}
 }

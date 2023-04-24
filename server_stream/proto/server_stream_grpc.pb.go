@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	ServerStreamTalk_Ping_FullMethodName      = "/ServerStreamTalk/Ping"
 	ServerStreamTalk_ListValue_FullMethodName = "/ServerStreamTalk/listValue"
 )
 
@@ -26,6 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServerStreamTalkClient interface {
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	ListValue(ctx context.Context, in *ServerStreamRequest, opts ...grpc.CallOption) (ServerStreamTalk_ListValueClient, error)
 }
 
@@ -35,6 +37,15 @@ type serverStreamTalkClient struct {
 
 func NewServerStreamTalkClient(cc grpc.ClientConnInterface) ServerStreamTalkClient {
 	return &serverStreamTalkClient{cc}
+}
+
+func (c *serverStreamTalkClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, ServerStreamTalk_Ping_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *serverStreamTalkClient) ListValue(ctx context.Context, in *ServerStreamRequest, opts ...grpc.CallOption) (ServerStreamTalk_ListValueClient, error) {
@@ -73,6 +84,7 @@ func (x *serverStreamTalkListValueClient) Recv() (*ServerStreamResponse, error) 
 // All implementations must embed UnimplementedServerStreamTalkServer
 // for forward compatibility
 type ServerStreamTalkServer interface {
+	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	ListValue(*ServerStreamRequest, ServerStreamTalk_ListValueServer) error
 	mustEmbedUnimplementedServerStreamTalkServer()
 }
@@ -81,6 +93,9 @@ type ServerStreamTalkServer interface {
 type UnimplementedServerStreamTalkServer struct {
 }
 
+func (UnimplementedServerStreamTalkServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedServerStreamTalkServer) ListValue(*ServerStreamRequest, ServerStreamTalk_ListValueServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListValue not implemented")
 }
@@ -95,6 +110,24 @@ type UnsafeServerStreamTalkServer interface {
 
 func RegisterServerStreamTalkServer(s grpc.ServiceRegistrar, srv ServerStreamTalkServer) {
 	s.RegisterService(&ServerStreamTalk_ServiceDesc, srv)
+}
+
+func _ServerStreamTalk_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerStreamTalkServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ServerStreamTalk_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerStreamTalkServer).Ping(ctx, req.(*PingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ServerStreamTalk_ListValue_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -124,7 +157,12 @@ func (x *serverStreamTalkListValueServer) Send(m *ServerStreamResponse) error {
 var ServerStreamTalk_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "ServerStreamTalk",
 	HandlerType: (*ServerStreamTalkServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _ServerStreamTalk_Ping_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "listValue",

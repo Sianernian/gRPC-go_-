@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	pb "gRPC_protoc/server_stream/proto"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-	"strconv"
+	"time"
 )
 
 type ServerStreamService struct {
@@ -25,14 +26,22 @@ func main() {
 	}
 }
 
-func (s *ServerStreamService) Route(req *pb.ServerStreamRequest, stv pb.ServerStreamTalk_ListValueServer) error {
-	for i := 0; i < 5; i++ {
+func (s *ServerStreamService) ListValue(req *pb.ServerStreamRequest, stv pb.ServerStreamTalk_ListValueServer) error {
+	for i := 0; i < 15; i++ {
 		err := stv.Send(&pb.ServerStreamResponse{
-			Value: "hello" + req.Data + strconv.Itoa(i),
+			Value: "hello" + req.Data,
+			Code:  int32(i),
 		})
 		if err != nil {
 			log.Fatalf("stv.Send pb.ServerStreamResponse err:%v", err)
 		}
+		time.Sleep(1 * time.Second)
 	}
 	return nil
+}
+
+func (s *ServerStreamService) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
+	return &pb.PingResponse{
+		Value: "hello" + req.Data,
+	}, nil
 }
