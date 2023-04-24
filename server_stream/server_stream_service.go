@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gRPC_protoc/server_stream/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"log"
 	"net"
 	"time"
@@ -18,7 +19,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("net listen err:%v", err)
 	}
-	gRPCServer := grpc.NewServer()
+	// 设置 keepAlive 参数
+	keepAlivePar := keepalive.ServerParameters{
+		Time:    15 * time.Second,
+		Timeout: 2 * time.Second,
+	}
+	gRPCServer := grpc.NewServer(grpc.KeepaliveParams(keepAlivePar))
 	pb.RegisterServerStreamTalkServer(gRPCServer, &ServerStreamService{})
 	err = gRPCServer.Serve(listener)
 	if err != nil {

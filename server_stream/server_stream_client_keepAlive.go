@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "gRPC_protoc/server_stream/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"io"
 	"log"
 	"time"
@@ -16,32 +17,32 @@ const (
 func main() {
 	var conn *grpc.ClientConn
 	var err error
-	for {
-		conn, err = grpc.Dial(address, grpc.WithInsecure())
-		if err != nil {
-			log.Fatalf("grpc.Dial err:%v", err)
-			time.Sleep(time.Second)
-			continue
-		}
-		break
+	conn, err = grpc.Dial(address, grpc.WithInsecure(), grpc.WithKeepaliveParams(keepalive.ClientParameters{
+		Time:                15 * time.Second,
+		Timeout:             2 * time.Second,
+		PermitWithoutStream: false, // 如果为true，则即使客户端没有活动流，也会发送keepalive
+	}))
+	if err != nil {
+		log.Fatalf("grpc.Dial err:%v", err)
 	}
+
 	defer conn.Close()
 
 	client := pb.NewServerStreamTalkClient(conn)
 	//心跳检测
-	ticker := time.NewTicker(time.Second * 5)
-	defer ticker.Stop()
-	go func() {
-		for range ticker.C {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-			defer cancel()
-
-			if _, err := client.Ping(ctx, &pb.PingRequest{Data: "ping"}); err != nil {
-				log.Printf("ping error: %v", err)
-			}
-
-		}
-	}()
+	//ticker := time.NewTicker(time.Second * 5)
+	//defer ticker.Stop()
+	//go func() {
+	//	for range ticker.C {
+	//		ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	//		defer cancel()
+	//
+	//		if _, err := client.Ping(ctx, &pb.PingRequest{Data: "ping"}); err != nil {
+	//			log.Printf("ping error: %v", err)
+	//		}
+	//
+	//	}
+	//}()
 
 	// 执行其他操作
 	for {
@@ -52,18 +53,6 @@ func main() {
 		defer stream.CloseSend()
 		if err != nil {
 			log.Fatalf("client.ListValue(ctx, &pb.ServerStreamRequest{}):%v", err)
-			// 进行重连
-			//for {
-			//	conn, err = grpc.Dial(address, grpc.WithInsecure())
-			//	if err != nil {
-			//		log.Printf("failed to reconnect: %v", err)
-			//		time.Sleep(time.Second)
-			//		continue
-			//	}
-			//	client = pb.NewServerStreamTalkClient(conn)
-			//	break
-			//}
-			//continue
 		}
 		for {
 			res, err := stream.Recv()
@@ -75,6 +64,7 @@ func main() {
 			}
 			if res.Code == int32(5) {
 				stream.CloseSend()
+				time.Sleep(16 * time.Second)
 				log.Println("stream paused")
 				//	进行重连
 				for {
