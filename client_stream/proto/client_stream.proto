@@ -2,11 +2,15 @@ syntax ="proto3";
 
 option go_package =".;client";
 
-message ClientStreamReques{
+message ClientStreamRequest{
   string Data =1;
 }
 
 message ClientStreamResponse{
   int32 Code =1;
   string Value=2;
+}
+
+service ClientStream_go {
+  rpc RouteList(stream ClientStreamRequest) returns(ClientStreamResponse){}
 }
