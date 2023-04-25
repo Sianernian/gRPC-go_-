@@ -5,15 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce75fefe-215a-43c7-a186-16d3d901a3d7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_stream/client_stream_client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client_stream/client_stream_client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_stream/client_stream_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/client_stream/client_stream_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_stream/proto/client_stream.proto" beforeDir="false" afterPath="$PROJECT_DIR$/client_stream/proto/client_stream.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bothway_stream/client.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bothway_stream/proto/bothway.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bothway_stream/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file://C:/Program Files/Go" />
   <component name="Git.Settings">
@@ -31,6 +38,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -46,7 +54,16 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
-  <component name="RunManager" selected="Go Build.go build client_stream_client.go">
+  <component name="RunManager" selected="Go Build.go build client.go">
+    <configuration name="go build client.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="gRPC_protoc" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <package value="gRPC_protoc" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/bothway_stream/client.go" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build client_stream_client.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="gRPC_protoc" />
       <working_directory value="$PROJECT_DIR$" />
@@ -65,8 +82,19 @@
       <filePath value="$PROJECT_DIR$/client_stream/client_stream_service.go" />
       <method v="2" />
     </configuration>
+    <configuration name="go build server.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="gRPC_protoc" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <package value="gRPC_protoc" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/bothway_stream/server.go" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build client.go" />
+        <item itemvalue="Go Build.go build server.go" />
         <item itemvalue="Go Build.go build client_stream_client.go" />
         <item itemvalue="Go Build.go build gRPC_protoc/client_stream" />
       </list>
@@ -75,6 +103,17 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

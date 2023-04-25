@@ -1,0 +1,15 @@
+syntax ="proto3";
+
+option go_package=".;bothway";
+
+message BothwayRequest{
+  string question =1;
+}
+
+message BothwayResponse{
+  string answer =2;
+}
+
+service BothWayTale{
+  rpc cover(stream BothwayRequest) returns(stream BothwayResponse){}
+}
